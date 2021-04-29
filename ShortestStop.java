@@ -1,4 +1,3 @@
-package com.p1;
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -148,11 +147,16 @@ public class ShortestStop {
 		int costSize = EdgeCost.size();
 		int edgeSize =Edge.size();
 		List<String> ans= new ArrayList();
-		String startStopId = "1888";
-		String endStopId = "9043";
+		String startStopId = "1887";//start ID
+		String endStopId = "9043";//end ID
 		ans = ShortestPath(Edge,EdgeCost, startStopId, endStopId);//OUTPUT ANS；
 		//Stop and COST is all in ans String.
+		//print
+		System.out.printf("From StartStopId %s ",startStopId);
+		System.out.printf("To EndStopId %s is",endStopId);
+		for (int i=0;i<ans.size();i++) {
+		System.out.println(ans.get(i));
+		}
 	}
 
 }
-
