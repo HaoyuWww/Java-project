@@ -36,9 +36,6 @@ public class DataResolver {
 				continue;
 			}
 			String line = reader.nextLine();
-            /*
-            * resolve each line data and store the data into arraylist
-            */
 			if (line != null) {
 				String partLine[] = line.split(",");
 				StringBuilder sb = new StringBuilder();
@@ -61,6 +58,7 @@ public class DataResolver {
 				list.add(stopInfo);
 			}
 		}
+		reader.close();
 		return list;
 	}
 
@@ -72,12 +70,12 @@ public class DataResolver {
 	 *         wb,nb,sb,eb,etc. and set its at the end of stop name
 	 */
 	public StringBuilder moveSpecificFlagStopToEnd(StringBuilder sb) {
-        /*
-		* check whether the first words is eb,nb,sb,etc switch the two position of the
-		* flag word and the end elements if the elements of first and second position
-		* satisfy the condition above, then recombine the every word in the words array
-		* to a new stop name
-		*/
+		/*
+		 * check whether the first words is eb,nb,sb,etc switch the two position of the
+		 * flag word and the end elements if the elements of first and second position
+		 * satisfy the condition above, then recombine the every word in the words array
+		 * to a new stop name
+		 */
 		if (flagStops.contains(sb.substring(0, 8))) {
 			String part = sb.substring(0, 12);
 			sb.delete(0, 12);

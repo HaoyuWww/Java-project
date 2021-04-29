@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,8 +12,9 @@ public class TST {
 	private static int n; // size
 	private static Node<String> root; // root of TST
 	// All the loading stop data
-	private static HashMap<String, String> map = new HashMap<String, String>();;
-	private static List<String> list;
+	private static HashMap<String, String> map = new HashMap<String, String>();
+	// All the stop names
+	private static List<String> list = new ArrayList<String>();
 
 	public static TST buildTST() {
 		TST t = new TST();
@@ -29,8 +29,8 @@ public class TST {
 				map.put(code[1], lineData);
 			}
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Something went wrong.");
 		}
 		return t;
 	}
@@ -207,22 +207,20 @@ public class TST {
 
 	public List<String> find(String keywords) {
 		List<String> list = new ArrayList<>();
-		if (size() == 0) {
-			list.add("Empty file.");
-		} else {
-			Iterable<String> allNames = keysWithPrefix(keywords);
-			for (String names : allNames) {
-				list.add(map.get(get(names)));
-			}
+		Iterable<String> allNames = keysWithPrefix(keywords);
+		for (String names : allNames) {
+			list.add(map.get(get(names)));
 		}
 		return list;
 	}
 
 	public static void main(String[] args) {
 		TST t = TST.buildTST();
-		String stopName = "MILLER";
+		String stopName = "NANCY GREENE";
 		List<String> stops = t.find(stopName);
-		stops.forEach(stop -> System.out.println(stop));
+		for (String allData : stops) {
+			System.out.println(allData);
+		}
 		System.out.println("Total stop(s)= " + stops.size());
 	}
 }
