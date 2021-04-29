@@ -3,10 +3,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
-        BufferedReader br = null;
+        String time = "";
+        tripInfoSort(time);
+    }
+
+    private static void tripInfoSort(String oneArrivalTime){
+        BufferedReader br;
         HashMap<String,TreeMap<String,String>> infoMap = new HashMap<>();
         try{
             String line;
@@ -28,14 +34,11 @@ public class Main {
                     infoMap.put(arrivalTime,detail);
                 }
             }
-            //enter the arrival time
-            Scanner scanner = new Scanner(System.in);
-            while(scanner.hasNextLine()) {
-                String oneArrivalTime = scanner.nextLine();
+            
                 if (isValidTime(oneArrivalTime)) {
                     if (!infoMap.containsKey(oneArrivalTime)) {
                         System.out.println("Zero item matches this time");
-                            return;
+                        return;
                     }
                     TreeMap<String, String> treeMap = infoMap.get(oneArrivalTime);
                     Iterator<Map.Entry<String, String>> iterator = treeMap.entrySet().iterator();
@@ -45,7 +48,7 @@ public class Main {
                 } else {
                     System.out.println("The time format is wrong");
                 }
-            }
+
         }catch (FileNotFoundException e){
             System.out.println("File not found!");
         } catch (IOException e) {
@@ -53,8 +56,12 @@ public class Main {
         }
     }
 
-    //Determine whether the arrival time is reasonable
     private static boolean isValidTime(String arrivalTime) {
+        for(int i = 0;i<arrivalTime.length();i++){
+            if(!Character.isDigit(arrivalTime.charAt(i)) && arrivalTime.charAt(i) != ':'){
+                return false;
+            }
+        }
         String[] time = arrivalTime.trim().split(":");
         int[] timeNum = new int[3];
         for(int i = 0;i<3;i++){
