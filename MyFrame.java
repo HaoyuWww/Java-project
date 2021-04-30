@@ -69,11 +69,11 @@ public class MyFrame extends JFrame {
 		final JComboBox<String> minInput = new JComboBox<String>(min_Sec);
 		final JComboBox<String> secInput = new JComboBox<String>(min_Sec);
 		P1.add(show);
-		show.setBounds(new Rectangle(350, 50, 80, 25));
+		show.setBounds(new Rectangle(350, 50, 100, 25));
 
 		JLabel showDetails = new JLabel("to show bus details");
 		P1.add(showDetails);
-		showDetails.setBounds(new Rectangle(430, 50, 150, 25));
+		showDetails.setBounds(new Rectangle(450, 50, 150, 25));
 
 		P1.add(secInput);
 		secInput.setBounds(new Rectangle(250, 50, 80, 25));
@@ -93,11 +93,50 @@ public class MyFrame extends JFrame {
 		P1.add(seconds);
 		seconds.setBounds(new Rectangle(260, 30, 80, 25));
 
-		JLabel tit = new JLabel();
-		tit.setText(
-				"trip_id   arrival_time   departure_time   stop_id   stop_sequence   stop_headsign   pickup_type   drop_off_type   shape_dist_traveled");
-		P1.add(tit);
-		tit.setBounds(20, 150, 1000, 20);
+		JLabel trip_id = new JLabel();
+		trip_id.setText("trip_id");
+		P1.add(trip_id);
+		trip_id.setBounds(65, 180, 80, 20);
+		//arrival_time               "
+		JLabel arrival_time = new JLabel();
+		arrival_time.setText("arrival_time");
+		P1.add(arrival_time);
+		arrival_time.setBounds(160, 160, 80, 20);
+		
+		JLabel departure_time = new JLabel();
+		departure_time.setText("departure_time");
+		P1.add(departure_time);
+		departure_time.setBounds(250, 180, 100, 20);
+		
+		JLabel stop_id = new JLabel();
+		stop_id.setText("stop_id");
+		P1.add(stop_id);
+		stop_id.setBounds(370, 160, 80, 20);
+		
+		JLabel stop_sequence = new JLabel();
+		stop_sequence.setText("stop_sequence");
+		P1.add(stop_sequence);
+		stop_sequence.setBounds(430, 180, 100, 20);
+		
+		JLabel stop_headsign = new JLabel();
+		stop_headsign.setText("stop_headsign");
+		P1.add(stop_headsign);
+		stop_headsign.setBounds(510, 160, 100, 20);
+		
+		JLabel pickup_type = new JLabel();
+		pickup_type.setText("pickup_type");
+		P1.add(pickup_type);
+		pickup_type.setBounds(590, 180, 100, 20);
+		
+		JLabel drop_off_type = new JLabel();
+		drop_off_type.setText("drop_off_type");
+		P1.add(drop_off_type);
+		drop_off_type.setBounds(670, 160, 100, 20);
+		
+		JLabel shape_dist_traveled = new JLabel();
+	    shape_dist_traveled.setText("  shape_dist_traveled");
+		P1.add(shape_dist_traveled);
+		shape_dist_traveled.setBounds(740, 180, 180, 20);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(20, 200, 900, 400); 
@@ -297,22 +336,26 @@ public class MyFrame extends JFrame {
 
 			if (isValidTime(oneArrivalTime)) {
 				if (!infoMap.containsKey(oneArrivalTime)) {
-					//System.out.println("Zero item matches this time");
 					this.output.append("Zero item matches this time");
 					this.output.append("\n");
 					return;
 				}
 				TreeMap<String, String> treeMap = infoMap.get(oneArrivalTime);
 				Iterator<Map.Entry<String, String>> iterator = treeMap.entrySet().iterator();
+				//this.output.append("trip_id  arrival_time    departure_time    stop_id   stop_sequence     pickup_type  drop_off_type   shape_dist_traveled\n");
 				while (iterator.hasNext()) {
 
 				// System.out.println(iterator.next().getValue());
 					// res = iterator.next().getValue();
 					//MyFrame.res += iterator.next().getValue();
 					//System.out.println(iterator.next().getValue());
-					this.output.append(iterator.next().getValue());
+//					this.output.append(iterator.next().getValue());
+//					this.output.append("\n");
+					String[] values = iterator.next().getValue().split(",");
+					for(int i = 0;i<values.length;i++){
+						this.output.append(String.format("%18s",values[i]));
+					}
 					this.output.append("\n");
-
 				}
 			} else {
 				System.out.println("The time format is wrong");
