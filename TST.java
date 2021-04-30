@@ -223,7 +223,7 @@ public class TST {
 			String stopName = "EAGLECLIFF RD AT BAKER RD";
 			List<String> stops = t.find(stopName);
 			if (stops.size() == 0) {
-				System.out.println("Wrong input!");
+				System.out.println("Wrong input or no such stop!");
 			} else {
 				for (String allData : stops) {
 					System.out.println(allData);
