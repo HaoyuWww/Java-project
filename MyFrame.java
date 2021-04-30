@@ -7,10 +7,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,22 +27,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-
-
-
 public class MyFrame extends JFrame {
-	
+
 	public static String res;
 	public static String stop;
-	
+
 	JComboBox<String> options = new JComboBox<>();
 	JPanel cards = new JPanel();
 	JComboBox<String> timeList = new JComboBox<>();
 	JTextArea output = new JTextArea();
 	JTextArea stopOutput = new JTextArea();
+	JTextArea pathOutput = new JTextArea();
+	
 	JTextField textField = new JTextField(16);
 	JButton show = new JButton("Click me");
-	
 
 	public MyFrame(String title) {
 
@@ -49,9 +50,8 @@ public class MyFrame extends JFrame {
 		options.addItem("Search by time");
 		options.addItem("Search by stop name");
 		options.addItem("Search by path");
-		
-		
-        contentPane.add(options, BorderLayout.PAGE_START);
+
+		contentPane.add(options, BorderLayout.PAGE_START);
 		contentPane.add(cards, null);
 		// zxl's work
 
@@ -97,59 +97,57 @@ public class MyFrame extends JFrame {
 		trip_id.setText("trip_id");
 		P1.add(trip_id);
 		trip_id.setBounds(65, 180, 80, 20);
-		//arrival_time               "
+		// arrival_time "
 		JLabel arrival_time = new JLabel();
 		arrival_time.setText("arrival_time");
 		P1.add(arrival_time);
 		arrival_time.setBounds(160, 160, 80, 20);
-		
+
 		JLabel departure_time = new JLabel();
 		departure_time.setText("departure_time");
 		P1.add(departure_time);
 		departure_time.setBounds(250, 180, 100, 20);
-		
+
 		JLabel stop_id = new JLabel();
 		stop_id.setText("stop_id");
 		P1.add(stop_id);
 		stop_id.setBounds(370, 160, 80, 20);
-		
+
 		JLabel stop_sequence = new JLabel();
 		stop_sequence.setText("stop_sequence");
 		P1.add(stop_sequence);
 		stop_sequence.setBounds(430, 180, 100, 20);
-		
+
 		JLabel stop_headsign = new JLabel();
 		stop_headsign.setText("stop_headsign");
 		P1.add(stop_headsign);
 		stop_headsign.setBounds(510, 160, 100, 20);
-		
+
 		JLabel pickup_type = new JLabel();
 		pickup_type.setText("pickup_type");
 		P1.add(pickup_type);
 		pickup_type.setBounds(590, 180, 100, 20);
-		
+
 		JLabel drop_off_type = new JLabel();
 		drop_off_type.setText("drop_off_type");
 		P1.add(drop_off_type);
 		drop_off_type.setBounds(670, 160, 100, 20);
-		
+
 		JLabel shape_dist_traveled = new JLabel();
-	    shape_dist_traveled.setText("  shape_dist_traveled");
+		shape_dist_traveled.setText("  shape_dist_traveled");
 		P1.add(shape_dist_traveled);
 		shape_dist_traveled.setBounds(740, 180, 180, 20);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(20, 200, 900, 400); 
-	    P1.add(scrollPane_1);                
-	    
-	   // scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		//output.append(MyFrame.res);
-		//P1.add(output);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(20, 200, 900, 400);
+		P1.add(scrollPane_1);
+
+		// scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		// output.append(MyFrame.res);
+		// P1.add(output);
 		output.setBounds(20, 200, 900, 400);
 		scrollPane_1.setViewportView(output);
-		
-		
 
 		// contentPane.add(label);
 		// contentPane.add(textField);
@@ -178,57 +176,44 @@ public class MyFrame extends JFrame {
 		P2.add(typeIn);
 		typeIn.setBounds(new Rectangle(60, 30, 200, 25));
 		P2.add(button);
-		
-		
+
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*TST t = TST.buildTST();
-				String stopName = 
-				List<String> stops = t.find(stopName);
-				for (String allData : stops) {
-					System.out.println(allData);
-					//MyFrame.stop = allData;
-				}
-				System.out.println("Total stop(s)= " + stops.size());
-				//System.out.println(stopName );*/
-				
+				/*
+				 * TST t = TST.buildTST(); String stopName = List<String> stops =
+				 * t.find(stopName); for (String allData : stops) { System.out.println(allData);
+				 * //MyFrame.stop = allData; } System.out.println("Total stop(s)= " +
+				 * stops.size()); //System.out.println(stopName );
+				 */
+
 				TST t = TST.buildTST();
 				if (!TST.source) {
 					String stopName = typeIn.getText();
 					List<String> stops = t.find(stopName);
 					if (stops.size() == 0) {
-						stopOutput.append("Wrong input! Please enter bus stop full name or first few characters in the name!");
+						stopOutput.append(
+								"Wrong input! Please enter bus stop full name or first few characters in the name!");
 						stopOutput.append("\n");
-						//System.out.println("Wrong input!");
+						// System.out.println("Wrong input!");
 					} else {
 						for (String allData : stops) {
-							//System.out.println(allData);
+							// System.out.println(allData);
 							stopOutput.append(allData);
 							stopOutput.append("\n");
 						}
-						//System.out.println("Total stop(s)= " + stops.size());
+						// System.out.println("Total stop(s)= " + stops.size());
 						stopOutput.append("Total stop(s)= " + stops.size());
 						stopOutput.append("\n");
 					}
-				}}
-			
+				}
+			}
+
 		});
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(20, 200, 900, 400); 
-	    P2.add(scrollPane_2);                
-	    
-	   // scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		//output.append(MyFrame.res);
-		//P1.add(output);
-	    stopOutput.setBounds(20, 200, 900, 400);
+		scrollPane_2.setBounds(20, 200, 900, 400);
+		P2.add(scrollPane_2);
+		stopOutput.setBounds(20, 200, 900, 400);
 		scrollPane_2.setViewportView(stopOutput);
-		
-		
-		
-		
-		
-		
 
 		// why's work
 		JPanel P3 = new JPanel();
@@ -254,15 +239,47 @@ public class MyFrame extends JFrame {
 
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				File costfile = new File("transfers.txt");
+				File EdgeFile = new File("stop_times.txt");
 
-				String stopA = pathA.getText();
-				String stopB = pathB.getText();
+				List<List<String>> EdgeCost = ShortestStop.getCost(costfile);
+				List<List<String>> Edge = ShortestStop.getEdge(EdgeFile);
+				//int costSize = EdgeCost.size();
+				//int edgeSize = Edge.size();
+				List<String> ans = new ArrayList();
+				String startStopId = pathA.getText();;// start ID
+				String endStopId = pathB.getText();// end ID
+				ans = ShortestStop.CostShortestPath(Edge, EdgeCost, startStopId, endStopId);// OUTPUT ANS；
+				// Stop and COST is all in ans String.
+				// print
+				pathOutput.append("From StartStopId " + startStopId);
+				pathOutput.append(" To EndStopId " + endStopId + " is");
+				pathOutput.append("\n");
+				
+				//System.out.printf("From StartStopId %s " , startStopId);
+				//System.out.printf("To EndStopId %s is \n", endStopId);
+				
+				// hash remove element
+				List<String> ansNew = new ArrayList<String>(new HashSet(ans));
+				for (int i = 0; i < ansNew.size(); i++) {
+					//System.out.println(ansNew.get(i));
+					pathOutput.append(ansNew.get(i));
+					pathOutput.append("\n");
+				
+				//String stopA = pathA.getText();
+			//	String stopB = pathB.getText();
 
-				System.out.print(stopA);
-				System.out.print(stopB);
-
+				//System.out.print(stopA);
+				//System.out.print(stopB);
+				}
 			}
-		});
+			}
+		);
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(20, 200, 900, 400);
+		P3.add(scrollPane_3);
+		pathOutput.setBounds(20, 200, 900, 400);
+		scrollPane_3.setViewportView(pathOutput);
 
 		cards.setLayout(new CardLayout());
 		cards.add(P1, "zxl");
@@ -342,18 +359,19 @@ public class MyFrame extends JFrame {
 				}
 				TreeMap<String, String> treeMap = infoMap.get(oneArrivalTime);
 				Iterator<Map.Entry<String, String>> iterator = treeMap.entrySet().iterator();
-				//this.output.append("trip_id  arrival_time    departure_time    stop_id   stop_sequence     pickup_type  drop_off_type   shape_dist_traveled\n");
+				// this.output.append("trip_id arrival_time departure_time stop_id stop_sequence
+				// pickup_type drop_off_type shape_dist_traveled\n");
 				while (iterator.hasNext()) {
 
-				// System.out.println(iterator.next().getValue());
+					// System.out.println(iterator.next().getValue());
 					// res = iterator.next().getValue();
-					//MyFrame.res += iterator.next().getValue();
-					//System.out.println(iterator.next().getValue());
+					// MyFrame.res += iterator.next().getValue();
+					// System.out.println(iterator.next().getValue());
 //					this.output.append(iterator.next().getValue());
 //					this.output.append("\n");
 					String[] values = iterator.next().getValue().split(",");
-					for(int i = 0;i<values.length;i++){
-						this.output.append(String.format("%18s",values[i]));
+					for (int i = 0; i < values.length; i++) {
+						this.output.append(String.format("%18s", values[i]));
 					}
 					this.output.append("\n");
 				}
