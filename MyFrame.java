@@ -10,25 +10,20 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 
 
 
@@ -36,12 +31,15 @@ public class MyFrame extends JFrame {
 	
 	public static String res;
 	public static String stop;
+	
 	JComboBox<String> options = new JComboBox<>();
 	JPanel cards = new JPanel();
 	JComboBox<String> timeList = new JComboBox<>();
-
+	JTextArea output = new JTextArea();
+	JTextArea stopOutput = new JTextArea();
 	JTextField textField = new JTextField(16);
 	JButton show = new JButton("Click me");
+	
 
 	public MyFrame(String title) {
 
@@ -51,9 +49,9 @@ public class MyFrame extends JFrame {
 		options.addItem("Search by time");
 		options.addItem("Search by stop name");
 		options.addItem("Search by path");
-
-		contentPane.add(options, BorderLayout.PAGE_START);
-
+		
+		
+        contentPane.add(options, BorderLayout.PAGE_START);
 		contentPane.add(cards, null);
 		// zxl's work
 
@@ -100,11 +98,19 @@ public class MyFrame extends JFrame {
 				"trip_id   arrival_time   departure_time   stop_id   stop_sequence   stop_headsign   pickup_type   drop_off_type   shape_dist_traveled");
 		P1.add(tit);
 		tit.setBounds(20, 150, 1000, 20);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(20, 200, 900, 400); 
+	    P1.add(scrollPane_1);                
+	    
+	   // scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		JTextArea output = new JTextArea();
-		output.append(MyFrame.res);
-		P1.add(output);
-		output.setBounds(20, 200, 1000, 400);
+		//output.append(MyFrame.res);
+		//P1.add(output);
+		output.setBounds(20, 200, 900, 400);
+		scrollPane_1.setViewportView(output);
+		
+		
 
 		// contentPane.add(label);
 		// contentPane.add(textField);
@@ -152,20 +158,38 @@ public class MyFrame extends JFrame {
 					String stopName = typeIn.getText();
 					List<String> stops = t.find(stopName);
 					if (stops.size() == 0) {
-						System.out.println("Wrong input!");
+						stopOutput.append("Wrong input! Please enter bus stop full name or first few characters in the name!");
+						stopOutput.append("\n");
+						//System.out.println("Wrong input!");
 					} else {
 						for (String allData : stops) {
-							System.out.println(allData);
+							//System.out.println(allData);
+							stopOutput.append(allData);
+							stopOutput.append("\n");
 						}
-						System.out.println("Total stop(s)= " + stops.size());
+						//System.out.println("Total stop(s)= " + stops.size());
+						stopOutput.append("Total stop(s)= " + stops.size());
+						stopOutput.append("\n");
 					}
 				}}
 			
 		});
-		/*JTextArea stopOutput = new JTextArea();
-		stopOutput.append(MyFrame.stop);
-		P2.add(stopOutput);
-		stopOutput.setBounds(20, 200, 1000, 400);*/
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(20, 200, 900, 400); 
+	    P2.add(scrollPane_2);                
+	    
+	   // scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		//output.append(MyFrame.res);
+		//P1.add(output);
+	    stopOutput.setBounds(20, 200, 900, 400);
+		scrollPane_2.setViewportView(stopOutput);
+		
+		
+		
+		
+		
+		
 
 		// why's work
 		JPanel P3 = new JPanel();
@@ -247,13 +271,7 @@ public class MyFrame extends JFrame {
 
 	}
 
-//	private void onButtonOk() {
-//		String str = textField.getText();
-//
-//		JOptionPane.showMessageDialog(this, "type into:" + str);
-//
-//	}
-	private static void tripInfoSort(String oneArrivalTime) {
+	private void tripInfoSort(String oneArrivalTime) {
 		BufferedReader br;
 		HashMap<String, TreeMap<String, String>> infoMap = new HashMap<>();
 		try {
@@ -279,16 +297,21 @@ public class MyFrame extends JFrame {
 
 			if (isValidTime(oneArrivalTime)) {
 				if (!infoMap.containsKey(oneArrivalTime)) {
-					System.out.println("Zero item matches this time");
+					//System.out.println("Zero item matches this time");
+					this.output.append("Zero item matches this time");
+					this.output.append("\n");
 					return;
 				}
 				TreeMap<String, String> treeMap = infoMap.get(oneArrivalTime);
 				Iterator<Map.Entry<String, String>> iterator = treeMap.entrySet().iterator();
 				while (iterator.hasNext()) {
 
-					// System.out.println(iterator.next().getValue());
+				// System.out.println(iterator.next().getValue());
 					// res = iterator.next().getValue();
-					MyFrame.res += iterator.next().getValue();
+					//MyFrame.res += iterator.next().getValue();
+					//System.out.println(iterator.next().getValue());
+					this.output.append(iterator.next().getValue());
+					this.output.append("\n");
 
 				}
 			} else {
