@@ -40,50 +40,67 @@ public class ShortestStop {
 		*/
 	public static List<String> CostShortestPath(List<List<String>> Edge,List<List<String>> EdgeCost, String startStopId, String endStopId) {
 		
+		Double INIT = 100000.0;
+		// add an virtual starting point
+		List<String> addElem = new ArrayList<>();
+		addElem.add("0");
+		addElem.add(startStopId);
+		addElem.add("-1");
+		EdgeCost.add(0,addElem);
 		//System.out.println(EdgeSize);
 		int EdgeCostSize =EdgeCost.size();
 		List<String> ans = new ArrayList();
 		//stop_times.txt
         Double[] shortPath = new Double[EdgeCostSize];
-        for(int i=0;i<EdgeCostSize;i++) {
-        shortPath[i] = 0.0;//startStopId
-        }
         String path[] = new String[EdgeCostSize];
+        path[0] =startStopId;
         int visited[] = new int[EdgeCostSize];
-        visited[0] = 1;
         int end =0;
-        for(int count = 1;count<EdgeCostSize;count++){
-            //int k=-1;
-            Double dmin = 1000.0;
-            for(int i=1;i<EdgeCostSize;i++){
-                if(visited[i]==0 && (Double.parseDouble(EdgeCost.get(i).get(2))<dmin)){
-                  dmin = Double.parseDouble(EdgeCost.get(i).get(2))+shortPath[i-1];
-                  shortPath[i] = dmin;
-                  path[count] = EdgeCost.get(i).get(1);
-                  //dmin = Integer.valueOf(EdgeCost.get(i).get(2)).intValue();
-                	//k=i;
-                }
-            }
-            visited[count] = 1;
+       
+        for(int i=0;i<EdgeCostSize;i++) {
+        visited[i]=0;
+        if(EdgeCost.get(i).get(0).equals(startStopId)) {
+        	shortPath[i] = Double.parseDouble(EdgeCost.get(i).get(2));
         }
-            
-            //shortPath[k] = dmin;
-            //visited[k] = 1;
-            
+        else {
+        	shortPath[i] = INIT;
+        }
+        }
+        visited[0] =1;
+        for(int count = 0;count<EdgeCostSize;count++){
+            //int k=-1;
+            Double dmin = 100000.0;
+            int index = 0;
+            //visited[count] = 1;
+           // System.out.println(visited[1]);
             for(int i=0;i<EdgeCostSize;i++){
-                //if(visited[i]==0 &&EdgeCost.get(i).get(1).equals(startStopId)){
-                  //  path[i] = EdgeCost.get(i).get(1);
-               // }
-                if (EdgeCost.get(i).get(1).equals(endStopId)){
-                	//System.out.println(EdgeCost.get(i).get(1));
-                	end = i+1;
-                	break;
+            	//System.out.println(visited[i]);
+                if(visited[i]==0 && (Double.parseDouble(EdgeCost.get(i).get(2))<dmin)&&EdgeCost.get(i).get(0).equals(EdgeCost.get(i-1).get(0))){
+                  dmin = Double.parseDouble(EdgeCost.get(i).get(2));
+                  index = i;
                 }
             }
+            
+            visited[index] = 1;
+            path[count] = EdgeCost.get(index).get(1);
+            for(int i=0;i<EdgeCostSize;i++){
+                if(visited[i]==0 && (Double.parseDouble(EdgeCost.get(i).get(2))<dmin)) {// &&EdgeCost.get(i).get(0).equals(path[count-1])){
+                  shortPath[i] =  Double.parseDouble(EdgeCost.get(i).get(2)) + dmin;
+                 // path[count] = EdgeCost.get(index).get(1);
+                }
+            }
+        }
+        /*
+        for(int m=0;m<EdgeCostSize-1;m++) {
+            if (path[m].equals(endStopId)){
+        	    end = m;
+        	    break;
+            }
+        }
+        */
             //System.out.println(end);
-            for(int j=1;j<end;j++) {
-                ans.add(path[j]);
-                
+         for(int j=0;j<EdgeCostSize;j++) {
+             ans.add(path[j]+",");   
             }
         return ans;
 	}
@@ -146,15 +163,15 @@ public class ShortestStop {
 	
 	public static void main(String ards[]) {
 		File costfile = new File("C:\\Users\\Lenovo\\Desktop\\computer science\\project\\transfers.txt");
-                File EdgeFile = new File("C:\\Users\\Lenovo\\Desktop\\computer science\\project\\stop_times.txt");
+	     File EdgeFile = new File("C:\\Users\\Lenovo\\Desktop\\computer science\\project\\stop_times.txt");
 		
 		List<List<String>> EdgeCost = getCost(costfile);
 		List<List<String>> Edge = getEdge(EdgeFile);
 		int costSize = EdgeCost.size();
 		int edgeSize =Edge.size();
 		List<String> ans= new ArrayList();
-		String startStopId = "1888";//start ID
-		String endStopId = "1885";//end ID
+		String startStopId = "11827";//start ID
+		String endStopId = "12241";//end ID
 		ans = CostShortestPath(Edge,EdgeCost, startStopId, endStopId);//OUTPUT ANS；
 		//Stop and COST is all in ans String.
 		//print
@@ -163,8 +180,9 @@ public class ShortestStop {
 		// hash remove element
 		List<String> ansNew = new ArrayList<String>(new HashSet(ans));
 		for (int i=0;i<ansNew.size();i++) {
-		System.out.println(ansNew.get(i));
+		System.out.print(ansNew.get(i));
 		}
 	}
 
 }
+
