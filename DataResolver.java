@@ -71,19 +71,24 @@ public class DataResolver {
 	 */
 	public StringBuilder moveSpecificFlagStopToEnd(StringBuilder sb) {
 		/*
-		 * check whether the first words is eb,nb,sb,etc switch the two position of the
-		 * flag word and the end elements if the elements of first and second position
-		 * satisfy the condition above, then recombine the every word in the words array
-		 * to a new stop name
+		 * check whether the first or first two words is eb,nb,sb,etc switch the two
+		 * position of the flag word and the end elements if the elements of first and
+		 * second position satisfy the condition above, then recombine the every word
+		 * return as a new stop name
 		 */
-		if (flagStops.contains(sb.substring(0, 8))) {
-			String part = sb.substring(0, 12);
+
+		if (flagStops.contains(sb.substring(0, 8)) && !flagStops.contains(sb.substring(9, 11))) {
+			String partName = sb.substring(0, 8);
+			sb.delete(0, 9);
+			sb.append(" " + partName);
+		} else if (flagStops.contains(sb.substring(0, 8)) && flagStops.contains(sb.substring(9, 11))) {
+			String partName = sb.substring(0, 11);
 			sb.delete(0, 12);
-			sb.append(" " + part);
+			sb.append(" " + partName);
 		} else if (flagStops.contains(sb.substring(0, 2))) {
-			String part = sb.substring(0, 3);
+			String partName = sb.substring(0, 2);
 			sb.delete(0, 3);
-			sb.append(" " + part);
+			sb.append(" " + partName);
 		}
 		return sb;
 	}
