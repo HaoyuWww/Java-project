@@ -15,9 +15,11 @@ public class TST {
 	private static HashMap<String, String> map = new HashMap<String, String>();
 	// All the stop names
 	private static List<String> list = new ArrayList<String>();
+	private static boolean source = false;
 
 	public static TST buildTST() {
 		TST t = new TST();
+
 		DataResolver dataResolver = new DataResolver();
 		try {
 			list = dataResolver.resolveDataFrom("F:\\JavaData\\stops.txt");
@@ -31,6 +33,7 @@ public class TST {
 
 		} catch (Exception e) {
 			System.out.println("Something went wrong.");
+			source = true;
 		}
 		return t;
 	}
@@ -216,11 +219,17 @@ public class TST {
 
 	public static void main(String[] args) {
 		TST t = TST.buildTST();
-		String stopName = "NANCY GREENE";
-		List<String> stops = t.find(stopName);
-		for (String allData : stops) {
-			System.out.println(allData);
+		if (!source) {
+			String stopName = "EAGLECLIFF RD AT BAKER RD";
+			List<String> stops = t.find(stopName);
+			if (stops.size() == 0) {
+				System.out.println("Wrong input!");
+			} else {
+				for (String allData : stops) {
+					System.out.println(allData);
+				}
+				System.out.println("Total stop(s)= " + stops.size());
+			}
 		}
-		System.out.println("Total stop(s)= " + stops.size());
 	}
 }
